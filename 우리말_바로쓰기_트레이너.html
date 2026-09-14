@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리말 바로 쓰기 트레이너 · 공통국어2 2단원</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1a1d21; --muted:#6b7280; --line:#e3e6ea;
+    --accent:#1f4e79; --ok:#15803d; --okbg:#dcfce7; --no:#b91c1c; --nobg:#fee2e2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:16px;line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 18px 90px}
+  .eyebrow{font-size:12.5px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+  h1{font-size:25px;margin:6px 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;margin-bottom:16px}
+  h2{font-size:16px;margin:0 0 10px}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .lbl{font-size:12.5px;color:var(--muted);margin-right:4px}
+  button{font:inherit;cursor:pointer}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:6px 13px;font-size:13px;color:#374151}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;
+    border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600}
+  .btn.ghost{background:#fff;color:var(--accent)}
+  .btn:disabled{opacity:.45;cursor:default}
+  /* quiz */
+  .bar{height:6px;background:#e9edf2;border-radius:99px;overflow:hidden;margin:0 0 6px}
+  .bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+  .meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+  .cat{display:inline-block;font-size:11.5px;background:#eef2f7;color:#33465c;
+    border-radius:6px;padding:3px 9px;margin-bottom:12px}
+  .q{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:4px 0 6px;line-height:1.5}
+  .q u{text-decoration:none;border-bottom:2.5px dashed #9aa5b1;padding:0 22px}
+  .qs{font-size:13px;color:var(--muted);margin-bottom:16px}
+  .opts{display:grid;gap:9px}
+  .opt{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:11px;
+    padding:14px 16px;font-size:17px;transition:.12s}
+  .opt:hover:not(:disabled){border-color:#9aa5b1;background:#fafbfc}
+  .opt.ok{border-color:var(--ok);background:var(--okbg)}
+  .opt.no{border-color:var(--no);background:var(--nobg)}
+  .fb{margin-top:14px;border-radius:11px;padding:14px 16px;font-size:14px;display:none}
+  .fb.show{display:block}
+  .fb.ok{background:var(--okbg);border:1px solid #86efac}
+  .fb.no{background:var(--nobg);border:1px solid #fca5a5}
+  .fb .h{display:block;margin-bottom:5px;font-weight:700}
+  .hint{margin-top:10px;background:#fff;border:1px dashed var(--line);border-radius:9px;
+    padding:11px 13px;font-size:13.5px;color:#33465c}
+  .hint .pr{font-weight:700;color:var(--accent);font-size:12px;letter-spacing:.03em}
+  /* result */
+  .score{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .score small{font-size:16px;font-weight:500;color:var(--muted)}
+  .stat{margin:12px 0}
+  .stat .t{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+  .sbar{height:9px;background:#e9edf2;border-radius:99px;overflow:hidden}
+  .sbar i{display:block;height:100%;border-radius:99px}
+  .wrongs{margin-top:8px}
+  .wrong{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:7px;font-size:13.5px}
+  .wrong s{color:var(--no)}
+  .wrong b{color:var(--ok)}
+  .princ{font-size:13.5px}
+  .princ dt{font-weight:700;margin-top:9px}
+  .princ dd{margin:2px 0 0;color:#33465c}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:22px}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">공통국어2 · 2단원 (1) 우리말 바로 쓰기 · [10공국2-04-02]</div>
+<h1>우리말 바로 쓰기 트레이너</h1>
+<div class="sub">한글 맞춤법 제1항 — “한글 맞춤법은 표준어를 소리대로 적되, 어법에 맞도록 함을 원칙으로 한다.”</div>
+
+<!-- 설정 -->
+<div class="card" id="setup">
+  <h2>시작하기 전에</h2>
+  <div class="row" style="margin-bottom:12px">
+    <span class="lbl">힌트 언어</span>
+    <span id="langs"></span>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <span class="lbl">문항 범위</span>
+    <span id="cats"></span>
+  </div>
+  <div class="row" style="margin-bottom:16px">
+    <span class="lbl">모드</span>
+    <button class="chip on" data-mode="practice">연습 — 풀 때마다 바로 설명</button>
+    <button class="chip" data-mode="test">진단 — 끝나고 한 번에 결과</button>
+  </div>
+  <button class="btn" id="start">시작하기</button>
+</div>
+
+<!-- 문제 -->
+<div class="card hide" id="quiz">
+  <div class="bar"><i id="prog" style="width:0%"></i></div>
+  <div class="meta"><span id="idx"></span><span id="sc"></span></div>
+  <div style="margin-top:14px"><span class="cat" id="cat"></span></div>
+  <div class="q" id="qtext"></div>
+  <div class="qs" id="qsub"></div>
+  <div class="opts" id="opts"></div>
+  <div class="fb" id="fb"></div>
+  <div class="row" style="margin-top:16px;justify-content:space-between">
+    <button class="btn ghost" id="quit">그만두기</button>
+    <button class="btn" id="next" disabled>다음 →</button>
+  </div>
+</div>
+
+<!-- 결과 -->
+<div class="card hide" id="result">
+  <h2>결과</h2>
+  <div class="score" id="rscore"></div>
+  <div id="rstats"></div>
+  <h2 style="margin-top:22px">다시 볼 문항</h2>
+  <div class="wrongs" id="rwrongs"></div>
+  <div class="row" style="margin-top:20px">
+    <button class="btn" id="retryWrong">틀린 것만 다시</button>
+    <button class="btn ghost" id="again">처음부터 다시</button>
+    <button class="btn ghost" id="dl">오류 유형 리포트 내려받기</button>
+  </div>
+  <div class="hint" style="margin-top:14px">
+    내려받은 리포트는 <b>수행평가② 「우리말 바로 쓰기 캠페인 발표」</b>의 활동지 ②-1과
+    최소 성취수준 보충 과제의 근거 자료로 씁니다.
+  </div>
+</div>
+
+<!-- 원리 -->
+<div class="card">
+  <h2>맞춤법의 두 원리</h2>
+  <dl class="princ">
+    <dt>① 소리대로 적기</dt>
+    <dd>들리는 대로 적습니다. 예) 구름, 나무, 하늘</dd>
+    <dt>② 어법에 맞도록 적기</dt>
+    <dd>소리가 달라져도 낱말의 원래 모습을 밝혀 적습니다.
+        예) [꼬치] → <b>꽃이</b>, [일거요] → <b>읽어요</b></dd>
+  </dl>
+  <div class="hint" style="margin-top:12px">
+    두 원리가 부딪힐 때는 <b>뜻을 알아보기 쉬운 쪽</b>을 고릅니다. 그래서 ‘꽃이’를 ‘꼬치’로 적지 않습니다.
+  </div>
+</div>
+
+<footer>전남미래국제고등학교 · 공통국어2 수업 자료 · 지구촌 교실 시즌 2</footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ 데이터 */
+const LANGS = [["ko","한국어"],["en","English"],["ru","Русский"],["vi","Tiếng Việt"],["zh","中文"],["uz","Oʻzbekcha"]];
+
+const HINTS = {
+ doe:{ko:"'해'를 넣어 말이 되면 '돼', '하'를 넣어 말이 되면 '되'.",
+      en:"If 해 fits, write 돼. If 하 fits, write 되.",
+      ru:"Если подходит «해» — пишите 돼; если «하» — 되.",
+      vi:"Nếu thay được bằng 해 thì viết 돼; nếu thay được bằng 하 thì viết 되.",
+      zh:"能换成「해」就写 돼，能换成「하」就写 되。",
+      uz:"«해» mos kelsa 돼, «하» mos kelsa 되 yoziladi."},
+ an:{ko:"'안'은 띄어 써서 뒷말을 꾸민다. '않'은 '-지 않다'처럼 앞말에 붙는다.",
+     en:"안 stands alone before a verb. 않 appears in the pattern -지 않다.",
+     ru:"«안» пишется отдельно перед глаголом. «않» — в конструкции -지 않다.",
+     vi:"안 viết tách, đứng trước động từ. 않 dùng trong -지 않다.",
+     zh:"안 单独写在动词前；않 用于 -지 않다 结构。",
+     uz:"«안» fe'l oldida alohida yoziladi. «않» «-지 않다» tarkibida keladi."},
+ bat:{ko:"소리가 달라져도 낱말의 원래 모습을 밝혀 적는다. (어법에 맞도록 적기)",
+      en:"Keep the word's original form even when the sound changes.",
+      ru:"Сохраняйте исходную форму слова, даже если звучание меняется.",
+      vi:"Giữ nguyên dạng gốc của từ dù âm đọc thay đổi.",
+      zh:"即使读音变化，也要保留词的原形。",
+      uz:"Talaffuz o'zgarsa ham, so'zning asl shakli saqlanadi."},
+ space:{ko:"'수, 만큼, 만, 때'처럼 홀로 못 쓰는 의존 명사는 앞말과 띄어 쓴다.",
+        en:"Bound nouns such as 수, 만큼, 만, 때 are written apart from the previous word.",
+        ru:"Зависимые существительные (수, 만큼, 만, 때) пишутся отдельно от предыдущего слова.",
+        vi:"Danh từ phụ thuộc (수, 만큼, 만, 때) viết tách khỏi từ đứng trước.",
+        zh:"依存名词（수、만큼、만、때）要与前词分开写。",
+        uz:"Bog'liq otlar (수, 만큼, 만, 때) oldingi so'zdan ajratib yoziladi."},
+ sai:{ko:"두 낱말이 합쳐질 때 뒷말이 된소리로 나거나 ㄴ 소리가 덧나면 사이시옷을 적는다.",
+      en:"Add ㅅ when the second word becomes tense or an extra ㄴ sound appears.",
+      ru:"Добавьте ㅅ, если второе слово произносится напряжённо или появляется звук ㄴ.",
+      vi:"Thêm ㅅ khi từ sau đọc căng hơn hoặc xuất hiện thêm âm ㄴ.",
+      zh:"当后一个词读成紧音或多出 ㄴ 音时，要加 ㅅ。",
+      uz:"Ikkinchi so'z kuchli tovush bilan aytilsa yoki ㄴ tovushi qo'shilsa, ㅅ yoziladi."},
+ word:{ko:"뜻을 먼저 생각하면 표기가 보인다. '웬'은 '어떠한', '왠지'는 '왜인지'의 준말.",
+       en:"Think of the meaning first: 웬 = 'what kind of', 왠지 = short for 왜인지.",
+       ru:"Сначала подумайте о значении: 웬 — «какой-то», 왠지 — сокращение от 왜인지.",
+       vi:"Hãy nghĩ về nghĩa trước: 웬 = 'nào đó', 왠지 = dạng rút gọn của 왜인지.",
+       zh:"先想意思：웬＝「什么样的」，왠지＝왜인지 的缩略形。",
+       uz:"Avval ma'nosini o'ylang: 웬 = 'qanaqadir', 왠지 = 왜인지 ning qisqargani."},
+};
+
+const CATS = {
+ doe:"되 / 돼", an:"안 / 않", bat:"받침 표기", space:"띄어쓰기",
+ sai:"사이시옷", word:"자주 틀리는 낱말",
+};
+const CATCOLOR = {doe:"#2563eb", an:"#d97706", bat:"#16a34a", space:"#7c3aed",
+                  sai:"#0891b2", word:"#db2777"};
+
+const Q = [
+ // 되 / 돼
+ {c:"doe", q:"내일 만나도 ___?", s:"‘해’를 넣어 보세요.", o:["돼","되"], a:0,
+  e:"‘만나도 해?’가 자연스러우므로 <b>돼</b>가 맞습니다. ‘돼’는 ‘되어’의 준말입니다."},
+ {c:"doe", q:"숙제를 다 하면 나가도 ___니?", s:"‘하’를 넣어 보세요.", o:["되","돼"], a:0,
+  e:"‘나가도 하니?’ 자리에는 <b>되니</b>를 씁니다. 어간 ‘되-’에 어미 ‘-니’가 바로 붙습니다."},
+ {c:"doe", q:"약속 시간이 다 ___어 간다.", s:"뒤에 ‘-어’가 이미 있습니다.", o:["되","돼"], a:0,
+  e:"‘돼’ 자체가 ‘되어’이므로 뒤에 ‘어’를 또 붙일 수 없습니다. <b>되어 간다</b>가 바릅니다."},
+ {c:"doe", q:"이렇게 하면 안 ___.", s:"문장을 여기서 끝냅니다.", o:["돼","되"], a:0,
+  e:"‘안 해.’가 되므로 <b>안 돼.</b>가 맞습니다. 문장 끝에서는 ‘되’만으로 끝낼 수 없습니다."},
+ // 안 / 않
+ {c:"an", q:"밥을 ___ 먹었어요.", s:"‘아니’의 뜻입니다.", o:["안","않"], a:0,
+  e:"<b>안</b>은 ‘아니’의 준말로, 띄어 써서 뒷말을 꾸밉니다."},
+ {c:"an", q:"숙제를 하지 ___았어요.", s:"‘-지 ___다’ 짜임입니다.", o:["않","안"], a:0,
+  e:"<b>않</b>은 ‘아니하-’의 준말로, ‘-지 않다’ 짜임에서 앞말에 붙어 서술어가 됩니다."},
+ {c:"an", q:"오늘은 춥지 ___아요.", s:"‘-지 ___다’ 짜임입니다.", o:["않","안"], a:0,
+  e:"‘춥지 아니하아요 → 춥지 <b>않</b>아요’입니다."},
+ {c:"an", q:"저는 매운 것을 ___ 좋아해요.", s:"뒤의 ‘좋아해요’를 꾸밉니다.", o:["안","않"], a:0,
+  e:"동사 앞에서 부정할 때는 <b>안</b>을 띄어 씁니다."},
+ // 받침 표기
+ {c:"bat", q:"[꼬치] 예쁘게 피었습니다.", s:"소리는 [꼬치]입니다. 바른 표기는?", o:["꽃이","꼬치"], a:0,
+  e:"소리는 [꼬치]이지만 낱말의 원래 모습을 밝혀 <b>꽃이</b>로 적습니다."},
+ {c:"bat", q:"책을 [일거요].", s:"소리는 [일거요]입니다. 바른 표기는?", o:["읽어요","일거요"], a:0,
+  e:"어간 ‘읽-’의 모습을 살려 <b>읽어요</b>로 적습니다."},
+ {c:"bat", q:"교복을 [이버요].", s:"소리는 [이버요]입니다. 바른 표기는?", o:["입어요","이버요"], a:0,
+  e:"어간 ‘입-’을 밝혀 <b>입어요</b>로 적습니다."},
+ {c:"bat", q:"이 옷은 [갑씨] 쌉니다.", s:"소리는 [갑씨]입니다. 바른 표기는?", o:["값이","갑시"], a:0,
+  e:"명사 ‘값’의 모습을 살려 <b>값이</b>로 적습니다."},
+ // 띄어쓰기
+ {c:"space", q:"나는 한국어로 발표를 ( ).", s:"바르게 띄어 쓴 것은?", o:["할 수 있다","할수있다"], a:0,
+  e:"‘수’는 홀로 쓸 수 없는 의존 명사이므로 앞말과 띄어 <b>할 수 있다</b>로 씁니다."},
+ {c:"space", q:"( ) 가져가세요.", s:"바르게 띄어 쓴 것은?", o:["먹을 만큼만","먹을만큼만"], a:0,
+  e:"‘만큼’도 의존 명사이므로 띄어 씁니다. <b>먹을 만큼만</b>"},
+ {c:"space", q:"고향에 ( ) 돌아갔다.", s:"‘시간이 지나서’의 뜻입니다.", o:["삼 년 만에","삼년만에"], a:0,
+  e:"시간의 경과를 뜻하는 ‘만’은 의존 명사입니다. 단위 명사 ‘년’도 띄어 <b>삼 년 만에</b>로 씁니다."},
+ {c:"space", q:"( ) 학생은 모두 열두 명이다.", s:"바르게 띄어 쓴 것은?", o:["우리 반","우리반"], a:0,
+  e:"‘우리’와 ‘반’은 각각 낱말이므로 띄어 <b>우리 반</b>으로 씁니다."},
+ // 사이시옷
+ {c:"sai", q:"나무 + 잎 → [나문닙]", s:"바른 표기는?", o:["나뭇잎","나무잎"], a:0,
+  e:"뒷말 첫소리에 ㄴ 소리가 덧나므로 사이시옷을 넣어 <b>나뭇잎</b>으로 적습니다."},
+ {c:"sai", q:"등교 + 길 → [등교낄]", s:"바른 표기는?", o:["등굣길","등교길"], a:0,
+  e:"뒷말이 된소리 [낄]로 나므로 <b>등굣길</b>로 적습니다."},
+ {c:"sai", q:"바다 + 가 → [바다까]", s:"바른 표기는?", o:["바닷가","바다가"], a:0,
+  e:"뒷말이 된소리로 나므로 <b>바닷가</b>로 적습니다."},
+ {c:"sai", q:"머리 + 말 → [머리말]", s:"바른 표기는?", o:["머리말","머릿말"], a:0,
+  e:"된소리도 ㄴ 덧남도 없으므로 사이시옷을 넣지 않습니다. <b>머리말</b>"},
+ // 자주 틀리는 낱말
+ {c:"word", q:"오늘이 ___이지?", s:"‘몇 날’을 묻는 말입니다.", o:["며칠","몇일"], a:0,
+  e:"‘몇일’이라는 표기는 없습니다. 언제나 <b>며칠</b>로 적습니다."},
+ {c:"word", q:"이게 ___ 일이야?", s:"‘어떠한’의 뜻입니다.", o:["웬","왠"], a:0,
+  e:"‘어떠한’의 뜻일 때는 <b>웬</b>입니다. ‘왠’은 오직 ‘왠지’에서만 씁니다."},
+ {c:"word", q:"오늘은 ___ 기분이 좋다.", s:"‘왜인지’의 준말입니다.", o:["왠지","웬지"], a:0,
+  e:"‘왜인지’가 줄어든 말이므로 <b>왠지</b>로 적습니다."},
+ {c:"word", q:"버스를 놓쳤어. 이제 나 ___?", s:"‘어떻게 해’의 준말입니다.", o:["어떡해","어떻해"], a:0,
+  e:"‘어떻게 해’가 줄어 <b>어떡해</b>가 됩니다. ‘어떻해’라는 표기는 없습니다."},
+];
+Q.forEach((q,i)=>q.id=i);
+
+/* ------------------------------------------------------------------ 상태 */
+let lang="ko", mode="practice", picked=new Set(Object.keys(CATS));
+let list=[], cur=0, score=0, log=[];
+
+const $ = s=>document.querySelector(s);
+const show = (id,on)=>$(id).classList.toggle("hide",!on);
+
+/* 언어 칩 */
+$("#langs").innerHTML = LANGS.map(([k,v],i)=>
+  `<button class="chip${i===0?" on":""}" data-lang="${k}">${v}</button>`).join(" ");
+$("#langs").onclick = e=>{
+  const b=e.target.closest("[data-lang]"); if(!b) return;
+  lang=b.dataset.lang;
+  $("#langs").querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c===b));
+};
+/* 범위 칩 */
+$("#cats").innerHTML = `<button class="chip on" data-cat="__all">전체</button> `
+  + Object.entries(CATS).map(([k,v])=>`<button class="chip on" data-cat="${k}">${v}</button>`).join(" ");
+$("#cats").onclick = e=>{
+  const b=e.target.closest("[data-cat]"); if(!b) return;
+  const k=b.dataset.cat;
+  if(k==="__all"){
+    const all = picked.size!==Object.keys(CATS).length;
+    picked = all ? new Set(Object.keys(CATS)) : new Set();
+  } else {
+    picked.has(k) ? picked.delete(k) : picked.add(k);
+  }
+  $("#cats").querySelectorAll("[data-cat]").forEach(c=>{
+    c.classList.toggle("on", c.dataset.cat==="__all"
+      ? picked.size===Object.keys(CATS).length : picked.has(c.dataset.cat));
+  });
+};
+/* 모드 칩 */
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{
+  mode=b.dataset.mode;
+  document.querySelectorAll("[data-mode]").forEach(c=>c.classList.toggle("on",c===b));
+});
+
+/* ------------------------------------------------------------------ 진행 */
+$("#start").onclick = ()=>{
+  if(!picked.size){ alert("문항 범위를 하나 이상 골라 주세요."); return; }
+  list = Q.filter(q=>picked.has(q.c));
+  begin();
+};
+$("#again").onclick = ()=>{ list = Q.filter(q=>picked.has(q.c)); begin(); };
+$("#retryWrong").onclick = ()=>{
+  const ws = log.filter(l=>!l.ok).map(l=>Q[l.id]);
+  if(!ws.length){ alert("틀린 문항이 없습니다."); return; }
+  list = ws; begin();
+};
+$("#quit").onclick = ()=>{ if(log.length) finish(); else { show("#quiz",false); show("#setup",true); } };
+
+function begin(){
+  cur=0; score=0; log=[];
+  show("#setup",false); show("#result",false); show("#quiz",true);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function render(){
+  const q=list[cur];
+  $("#prog").style.width = (cur/list.length*100)+"%";
+  $("#idx").textContent = `${cur+1} / ${list.length}`;
+  $("#sc").textContent = mode==="practice" ? `맞힌 개수 ${score}` : "";
+  const cc = CATCOLOR[q.c];
+  $("#cat").textContent = CATS[q.c];
+  $("#cat").style.background = cc+"1a";
+  $("#cat").style.color = cc;
+  $("#qtext").innerHTML = q.q.replace("___","<u> </u>");
+  $("#qsub").textContent = q.s;
+  const box=$("#opts"); box.innerHTML="";
+  q.o.map((t,i)=>[t,i]).forEach(([t,i])=>{
+    const b=el("button","opt",t); b.onclick=()=>answer(i,b); box.appendChild(b);
+  });
+  $("#fb").className="fb"; $("#fb").innerHTML="";
+  $("#next").disabled=true;
+  $("#next").textContent = cur===list.length-1 ? "결과 보기 →" : "다음 →";
+}
+
+function el(t,c,h){const e=document.createElement(t); e.className=c; e.innerHTML=h; return e;}
+
+function answer(i,btn){
+  const q=list[cur], ok = i===q.a;
+  if(ok) score++;
+  log.push({id:q.id, c:q.c, ok, chose:q.o[i]});
+  document.querySelectorAll(".opt").forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.a) b.classList.add("ok");
+    else if(j===i) b.classList.add("no");
+  });
+  if(mode==="practice"){
+    const f=$("#fb");
+    f.className="fb show "+(ok?"ok":"no");
+    f.innerHTML = `<span class="h">${ok?"맞았습니다":"다시 볼까요"}</span>${q.e}`
+      + `<div class="hint"><span class="pr">${CATS[q.c]} · 원리</span><br>${HINTS[q.c][lang]}`
+      + (lang!=="ko" ? `<br><span style="color:#6b7280">${HINTS[q.c].ko}</span>` : ``) + `</div>`;
+  }
+  $("#next").disabled=false;
+}
+
+$("#next").onclick = ()=>{
+  if(cur===list.length-1) finish();
+  else { cur++; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+};
+
+function finish(){
+  show("#quiz",false); show("#result",true);
+  const total=log.length, right=log.filter(l=>l.ok).length;
+  const pct = total? Math.round(right/total*100) : 0;
+  $("#rscore").innerHTML = `${pct}<small>점 &nbsp;·&nbsp; ${total}문항 중 ${right}문항 정답</small>`;
+
+  const by={};
+  log.forEach(l=>{ by[l.c]=by[l.c]||{n:0,ok:0}; by[l.c].n++; if(l.ok) by[l.c].ok++; });
+  $("#rstats").innerHTML = Object.entries(by).sort((a,b)=>a[1].ok/a[1].n-b[1].ok/b[1].n)
+    .map(([k,v])=>{
+      const p=Math.round(v.ok/v.n*100);
+      return `<div class="stat"><div class="t"><span>${CATS[k]}</span>
+        <span>${v.ok}/${v.n} · ${p}%</span></div>
+        <div class="sbar"><i style="width:${p}%;background:${CATCOLOR[k]}"></i></div></div>`;
+    }).join("");
+
+  const ws=log.filter(l=>!l.ok);
+  $("#rwrongs").innerHTML = ws.length ? ws.map(l=>{
+    const q=Q[l.id];
+    return `<div class="wrong"><b>${CATS[q.c]}</b> — ${q.q.replace("___","____")}<br>
+      내가 고른 답 <s>${l.chose}</s> → 바른 표기 <b>${q.o[q.a]}</b><br>
+      <span style="color:#6b7280">${q.e.replace(/<[^>]+>/g,"")}</span></div>`;
+  }).join("") : `<div class="wrong">모두 맞혔습니다. 다른 범위도 풀어 보세요.</div>`;
+
+  $("#retryWrong").disabled = !ws.length;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* 리포트 내려받기 */
+$("#dl").onclick = ()=>{
+  const by={};
+  log.forEach(l=>{ by[l.c]=by[l.c]||{n:0,ok:0}; by[l.c].n++; if(l.ok) by[l.c].ok++; });
+  const d=new Date();
+  const pad=n=>String(n).padStart(2,"0");
+  const stamp=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  let t = "우리말 바로 쓰기 트레이너 — 오류 유형 리포트\n";
+  t += "공통국어2 2단원 (1) 우리말 바로 쓰기 · [10공국2-04-02]\n";
+  t += "------------------------------------------------------------\n";
+  t += `작성 일시 : ${stamp}\n`;
+  t += "학년 반 이름 : ____________________\n\n";
+  t += `총 ${log.length}문항 중 ${log.filter(l=>l.ok).length}문항 정답\n\n`;
+  t += "[유형별 정답률]\n";
+  Object.entries(by).forEach(([k,v])=>{
+    t += ` - ${CATS[k]} : ${v.ok}/${v.n} (${Math.round(v.ok/v.n*100)}%)\n`;
+  });
+  const ws=log.filter(l=>!l.ok);
+  t += `\n[틀린 문항 ${ws.length}개]\n`;
+  ws.forEach((l,i)=>{
+    const q=Q[l.id];
+    t += `${i+1}. (${CATS[q.c]}) ${q.q.replace("___","____")}\n`;
+    t += `   내가 고른 답: ${l.chose}  /  바른 표기: ${q.o[q.a]}\n`;
+    t += `   ${q.e.replace(/<[^>]+>/g,"")}\n`;
+    t += `   원리: ${HINTS[q.c].ko}\n`;
+  });
+  t += "\n[다음에 할 일]\n";
+  const weak=Object.entries(by).filter(([,v])=>v.ok/v.n<0.8).map(([k])=>CATS[k]);
+  t += weak.length ? ` - 보충이 필요한 유형: ${weak.join(", ")}\n` : " - 모든 유형이 80% 이상입니다.\n";
+  t += " - 이 리포트를 활동지 ②-1에 붙이고, 학교에서 찾은 표기 오류 5건을 같은 유형으로 분류해 봅시다.\n";
+  const blob=new Blob([t],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="우리말_바로쓰기_오류유형리포트.txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+</script>
+</body>
+</html>
